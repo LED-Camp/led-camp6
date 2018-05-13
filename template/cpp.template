@@ -1,0 +1,69 @@
+<% def getGuardCode(str){str!=null&&str.trim().size()>1\
+    ?"&& (" + str + ")"\
+    :""}%>\
+#include <stdio.h>
+#include "rctank.h"
+#include "PreEvent.h"
+#include "${u.name}.h"
+
+${u.name}::${u.name}(){
+  this->state = _STATE_INITIAL;
+
+<% for(var in u.iclass.getAttributes()){%>\
+<% if(var.getAssociation() == null){%>\
+  this->${var.getName()} = 0;
+<%}%>\
+<%}%>\
+  motorL = new DcMotor(5, 6);
+  motorR = new DcMotor(13,19);
+}
+
+void ${u.name}::execState(){
+  switch(this->state){
+<% for(state in u.states){ %>\
+  case STATE_${state.name}:
+    ${state.doActivity}
+    break;
+<% } %>\
+  default:
+    break;
+  }
+}
+
+void ${u.name}::doTransition(unsigned long event){
+  this->beforeState = this->state;
+
+  switch(this->state){
+  case _STATE_INITIAL:
+    this->state = STATE_${u.initialState};
+
+    //entry
+    ${u.initialState.entry}
+
+    break;
+<% for(state in u.states){ %>\
+  case STATE_${state.name}:
+<% def firstFlag = true %>\
+<% for(t in state.outgoings){ %>\
+<% if(firstFlag){ firstFlag = false; } else {%>\
+    else
+<% } %>\
+    if(((event & ${t.event}) != 0) ${getGuardCode(t.guard)}){
+      // exit
+      ${state.exit}
+
+      //action
+      ${t.action}
+
+      this->state = STATE_${t.target.name};
+
+      //entry
+      ${t.target.entry}
+    }
+<% } %>\
+    break;
+<% } %>\
+  default:
+    break;
+  }
+}

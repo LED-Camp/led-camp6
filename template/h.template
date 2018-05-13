@@ -1,0 +1,34 @@
+#ifndef __${u.name}__
+#define __${u.name}__
+
+#include "rctank.h"
+#define _STATE_INITIAL 0x00000000
+<% def stateNo = 0x00000001 %>\
+<% for(state in u.states){ %>\
+#define STATE_${state.name} ((unsigned long)${stateNo})
+<% stateNo += 1 %>\
+<% } %>\
+
+class PreController;
+
+class ${u.name}{
+ public:
+  ${u.name}();
+  void execState();
+  void doTransition(unsigned long event);
+
+ private:
+  DcMotor *motorL;
+  DcMotor *motorR;
+
+  unsigned long state;
+  unsigned long beforeState;
+  PreController *preController;
+<% for(var in u.iclass.getAttributes()){%>\
+<% if(var.getAssociation() == null){%>\
+  ${var.getType()} ${var.getName()};
+<%}%>\
+<%}%>\
+};
+
+#endif

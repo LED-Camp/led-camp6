@@ -3,7 +3,7 @@
 #include "PreEvent.h"
 #include "Controller.h"
 
-Controller::Controller(){
+Controller::Controller(Position *position){
   this->state = _STATE_INITIAL;
 
   motorL = new DcMotor(5, 6);
@@ -83,7 +83,7 @@ printf("LEFT\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 8, motorL, motorR);
+      ChangeDriveMode(CW, 10, motorL, motorR);
 printf("RIGHT\n");
     }
     break;
@@ -98,7 +98,7 @@ printf("RIGHT\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 8, motorL, motorR);
+      ChangeDriveMode(CW, 10, motorL, motorR);
 printf("RIGHT\n");
     }
     else
@@ -227,7 +227,7 @@ printf("BACKWARD\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 8, motorL, motorR);
+      ChangeDriveMode(CW, 10, motorL, motorR);
 printf("RIGHT\n");
     }
     else

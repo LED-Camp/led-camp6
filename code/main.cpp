@@ -1,24 +1,29 @@
 #include <iostream>
 #include <time.h>
 #include "PreEvent.h"
+#include "Position.h"
+
   #include "Controller.h"
 
 
 int main(void){
   clock_t now;
   clock_t old;
-
+  Position *position;
   PreEvent *preEvent;
   float n;
 
-  preEvent = new PreEvent();
+  Controller *controller;
 
   if( wiringPiSetupGpio() < 0){ //initialize failed
     return 1;
   }
-  Controller *controller;
 
-  controller = new Controller();
+  position = Position::getInstance(2,3);
+
+  controller = new Controller(position);
+
+  preEvent = new PreEvent(position);
 
   now = clock();
   old = clock();

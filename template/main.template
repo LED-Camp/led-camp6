@@ -2,6 +2,8 @@
 #include <iostream>
 #include <time.h>
 #include "PreEvent.h"
+#include "Position.h"
+
 <% for(c in getClasses()){ %>\
   #include "${c.name}.h"
 <%}%>
@@ -9,22 +11,25 @@
 int main(void){
   clock_t now;
   clock_t old;
-
+  Position *position;
   PreEvent *preEvent;
   float n;
 
-  preEvent = new PreEvent();
-
-  if( wiringPiSetupGpio() < 0){ //initialize failed
-    return 1;
-  }
 <% for(c in getClasses()){ %>\
   ${c.name} *${u.getInstanceName(c)};
 <%}%>\
 
+  if( wiringPiSetupGpio() < 0){ //initialize failed
+    return 1;
+  }
+
+  position = Position::getInstance(2,3);
+
 <% for(c in getClasses()){ %>\
-  ${u.getInstanceName(c)} = new ${c.name}();
+  ${u.getInstanceName(c)} = new ${c.name}(position);
 <%}%>\
+
+  preEvent = new PreEvent(position);
 
   now = clock();
   old = clock();

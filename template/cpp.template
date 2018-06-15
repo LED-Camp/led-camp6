@@ -6,7 +6,7 @@
 #include "PreEvent.h"
 #include "${u.name}.h"
 
-${u.name}::${u.name}(){
+${u.name}::${u.name}(Position *position){
   this->state = _STATE_INITIAL;
 
 <% for(var in u.iclass.getAttributes()){%>\

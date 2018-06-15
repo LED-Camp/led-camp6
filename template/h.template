@@ -2,6 +2,8 @@
 #define __${u.name}__
 
 #include "rctank.h"
+#include "Position.h"
+
 #define _STATE_INITIAL 0x00000000
 <% def stateNo = 0x00000001 %>\
 <% for(state in u.states){ %>\
@@ -13,13 +15,14 @@ class PreController;
 
 class ${u.name}{
  public:
-  ${u.name}();
+  ${u.name}(Position *position);
   void execState();
   void doTransition(unsigned long event);
 
  private:
   DcMotor *motorL;
   DcMotor *motorR;
+  Position *position;
 
   unsigned long state;
   unsigned long beforeState;

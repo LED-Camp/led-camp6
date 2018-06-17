@@ -3,14 +3,16 @@
 #include <time.h>
 #include "PreEvent.h"
 #include "Position.h"
+#include <sys/time.h>
 
 <% for(c in getClasses()){ %>\
-  #include "${c.name}.h"
+#include "${c.name}.h"
 <%}%>
 
 int main(void){
-  clock_t now;
-  clock_t old;
+  struct timeval now;
+  struct timeval old;
+
   Position *position;
   PreEvent *preEvent;
   float n;
@@ -31,12 +33,12 @@ int main(void){
 
   preEvent = new PreEvent(position);
 
-  now = clock();
-  old = clock();
+  gettimeofday(&now, NULL);
+  gettimeofday(&old, NULL);
 
   while(true){
-    while((double)((now - old)/(double)CLOCKS_PER_SEC) < 0.1){
-      now = clock();
+    while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
+      gettimeofday(&now, NULL);
     }
     old = now;
 

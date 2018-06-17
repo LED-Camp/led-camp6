@@ -94,10 +94,10 @@ void Position::getPosition(float* distance, float* angle){
   float distanceTemp;
 
   l = countA * COUNT_TO_M;
-  //r = countB * COUNT_TO_M;
-  r = countA * COUNT_TO_M;
+  r = countB * COUNT_TO_M;
+
   distanceTemp = (l + r)/2.0;
-  
+
   *angle = ((l - r) / L) * 180.0 / 3.141592653589793F;
   *distance = distanceTemp;
 

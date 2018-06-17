@@ -1,4 +1,4 @@
-C:\cygwin64\home\cel54\pretank#include "rctank.h"
+#include "rctank.h"
 #define PWM_RANGE 100
 
 DcMotor:: DcMotor(int pinA, int pinB)

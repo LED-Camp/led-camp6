@@ -55,6 +55,20 @@ printf("STOP\n");
       ChangeDriveMode(CW, 5, motorL, motorR);
 printf("CW\n");
     }
+    else
+    if(((event & E_DOWN) != 0) ){
+      // exit
+      
+
+      //action
+      
+
+      this->state = STATE_STOP;
+
+      //entry
+      ChangeDriveMode(STOP, 5, motorL, motorR);
+printf("STOP\n");
+    }
     break;
   case STATE_STOP:
     if(((event & E_UP) != 0) ){
@@ -84,6 +98,20 @@ printf("FORWARD\n");
       //entry
       ChangeDriveMode(FORWARD, 5, motorL, motorR);
 printf("FORWARD\n");
+    }
+    else
+    if(((event & E_DOWN) != 0) ){
+      // exit
+      
+
+      //action
+      
+
+      this->state = STATE_STOP;
+
+      //entry
+      ChangeDriveMode(STOP, 5, motorL, motorR);
+printf("STOP\n");
     }
     break;
   default:

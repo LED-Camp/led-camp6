@@ -21,7 +21,7 @@ int main(void){
     return 1;
   }
 
-  position = Position::getInstance(2,3);
+  position = Position::getInstance(17, 27);
 
   controller = new Controller(position);
 

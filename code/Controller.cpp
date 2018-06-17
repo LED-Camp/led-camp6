@@ -69,7 +69,7 @@ printf("STOP\n");
       this->state = STATE_LEFT;
 
       //entry
-      ChangeDriveMode(CCW, 10, motorL, motorR);
+      ChangeDriveMode(CCW, 5, motorL, motorR);
 printf("LEFT\n");
     }
     else
@@ -83,7 +83,7 @@ printf("LEFT\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 10, motorL, motorR);
+      ChangeDriveMode(CW, 5, motorL, motorR);
 printf("RIGHT\n");
     }
     break;
@@ -98,7 +98,7 @@ printf("RIGHT\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 10, motorL, motorR);
+      ChangeDriveMode(CW, 5, motorL, motorR);
 printf("RIGHT\n");
     }
     else
@@ -112,7 +112,7 @@ printf("RIGHT\n");
       this->state = STATE_LEFT;
 
       //entry
-      ChangeDriveMode(CCW, 10, motorL, motorR);
+      ChangeDriveMode(CCW, 5, motorL, motorR);
 printf("LEFT\n");
     }
     else
@@ -141,7 +141,7 @@ printf("STOP\n");
       this->state = STATE_BACKWARD;
 
       //entry
-      ChangeDriveMode(BACKWARD, 8, motorL, motorR);
+      ChangeDriveMode(BACKWARD, 5, motorL, motorR);
 printf("BACKWARD\n");
     }
     else
@@ -170,7 +170,7 @@ printf("STOP\n");
       this->state = STATE_BACKWARD;
 
       //entry
-      ChangeDriveMode(BACKWARD, 8, motorL, motorR);
+      ChangeDriveMode(BACKWARD, 5, motorL, motorR);
 printf("BACKWARD\n");
     }
     else
@@ -199,7 +199,7 @@ printf("STOP\n");
       this->state = STATE_FORWARD;
 
       //entry
-      ChangeDriveMode(FORWARD, 8, motorL, motorR);
+      ChangeDriveMode(FORWARD, 5, motorL, motorR);
 printf("FORWARD\n");
     }
     else
@@ -213,7 +213,7 @@ printf("FORWARD\n");
       this->state = STATE_BACKWARD;
 
       //entry
-      ChangeDriveMode(BACKWARD, 8, motorL, motorR);
+      ChangeDriveMode(BACKWARD, 5, motorL, motorR);
 printf("BACKWARD\n");
     }
     else
@@ -227,7 +227,7 @@ printf("BACKWARD\n");
       this->state = STATE_RIGHT;
 
       //entry
-      ChangeDriveMode(CW, 10, motorL, motorR);
+      ChangeDriveMode(CW, 5, motorL, motorR);
 printf("RIGHT\n");
     }
     else
@@ -241,7 +241,7 @@ printf("RIGHT\n");
       this->state = STATE_LEFT;
 
       //entry
-      ChangeDriveMode(CCW, 10, motorL, motorR);
+      ChangeDriveMode(CCW, 5, motorL, motorR);
 printf("LEFT\n");
     }
     break;

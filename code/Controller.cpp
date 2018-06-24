@@ -3,7 +3,7 @@
 #include "PreEvent.h"
 #include "Controller.h"
 
-Controller::Controller(Position *position){
+Controller::Controller(Position *position, RangingSensor *rangingSensor){
   this->state = _STATE_INITIAL;
 
   motorL = new DcMotor(5, 6);

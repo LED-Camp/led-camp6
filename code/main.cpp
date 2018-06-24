@@ -11,6 +11,7 @@ int main(void){
   struct timeval now;
   struct timeval old;
 
+  RangingSensor *rangingSensor;
   Position *position;
   PreEvent *preEvent;
   float n;
@@ -21,11 +22,15 @@ int main(void){
     return 1;
   }
 
+  rangingSensor = RangingSensor::getInstance();
+  rangingSensor->Initialize();
+  rangingSensor->getRanging();
+
   position = Position::getInstance(2, 3);
 
-  controller = new Controller(position);
+  controller = new Controller(position, rangingSensor);
 
-  preEvent = new PreEvent(position);
+  preEvent = new PreEvent(position, rangingSensor);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);

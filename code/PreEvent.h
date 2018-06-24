@@ -8,6 +8,7 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 #include "Position.h"
+#include "RangingSensor.h"
 
 class PreController;
 
@@ -17,10 +18,11 @@ class PreController;
 #define E_RIGHT ((unsigned long)0x00000008)
 #define E_CHANGE_DISTANCE ((unsigned long)0x00000010)
 #define E_CHANGE_ANGLE ((unsigned long)0x00000020)
+#define E_CHANGE_RANGING ((unsigned long)0x00000040)
 
 class PreEvent{
 public:
-  PreEvent(Position* position);
+  PreEvent(Position* position, RangingSensor* rangingSensor);
   void updatePreEvent();
   unsigned long getPreEvent();
 
@@ -31,6 +33,9 @@ public:
 
   float distanceOld;
   float angleOld;
+
+  RangingSensor* rangingSensor;
+  uint16_t rangingDistanceOld;
 };
 
 #endif

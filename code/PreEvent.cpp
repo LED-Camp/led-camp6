@@ -7,6 +7,7 @@
 #include "iostream"
 #include "PreEvent.h"
 #include "Position.h"
+#include "RangingSensor.h"
 #include <unistd.h>   //_getch
 #include <termios.h>  //_getch
 #include <fcntl.h>
@@ -70,12 +71,14 @@ char getch(){
  * @return -
  * @sa -
  */
-PreEvent::PreEvent(Position *position) :
+PreEvent::PreEvent(Position *position, RangingSensor *rangingSensor) :
   distanceOld(0.0F),
-  angleOld(0.0F)
+  angleOld(0.0F),
+  rangingDistanceOld(0)
 {
   this->event = 0;
   this->position = position;
+  this->rangingSensor = rangingSensor;
 }
 
 /**
@@ -92,12 +95,22 @@ void PreEvent::updatePreEvent(){
   float absDistanceDiff;
   float absAngleDiff;
 
+  unsigned short rangingDistance;
+
   if(kbhit()){
     c = getchar();
   }
   position->getPosition(&distance, &angle);
   absDistanceDiff = ABS_FLOAT(this->distanceOld - distance);
   absAngleDiff = ABS_FLOAT(this->angleOld - angle);
+
+  rangingDistance = rangingSensor->getRanging();
+  if(rangingDistance == this->rangingDistanceOld){
+    this->event |= E_CHANGE_RANGING;
+  }else{
+    this->event &= E_CHANGE_RANGING;
+  }
+
 
   // E_UPƒCƒxƒ“ƒg”»’è
   if(c == 'w'){
@@ -144,6 +157,9 @@ void PreEvent::updatePreEvent(){
 
   this->distanceOld = distance;
   this->angleOld = angle;
+
+  printf("=%d, \n", rangingDistance);
+  this->rangingDistanceOld = rangingDistance;
 }
 
 

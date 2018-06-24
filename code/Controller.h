@@ -3,6 +3,7 @@
 
 #include "rctank.h"
 #include "Position.h"
+#include "RangingSensor.h"
 
 #define _STATE_INITIAL 0x00000000
 #define STATE_FORWARD ((unsigned long)1)
@@ -15,7 +16,7 @@ class PreController;
 
 class Controller{
  public:
-  Controller(Position *position);
+  Controller(Position *position, RangingSensor *rangingSensor);
   void execState();
   void doTransition(unsigned long event);
 
@@ -23,6 +24,7 @@ class Controller{
   DcMotor *motorL;
   DcMotor *motorR;
   Position *position;
+  RangingSensor *rangingSensor;
 
   unsigned long state;
   unsigned long beforeState;

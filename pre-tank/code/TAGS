@@ -1,0 +1,97 @@
+
+.#Position.cpp,0
+
+Controller.cpp,179
+Controller::Controller(Position *position){Controller6,86
+void Controller::execState(){execState15,268
+void Controller::doTransition(unsigned long event){doTransition32,541
+
+Controller.h,544
+#define __Controller____Controller__2,23
+#define _STATE_INITIAL _STATE_INITIAL7,90
+#define STATE_FORWARD STATE_FORWARD8,124
+#define STATE_STOP STATE_STOP9,165
+#define STATE_TURN STATE_TURN10,203
+class Controller{Controller14,264
+  DcMotor *motorL;motorL21,398
+  DcMotor *motorR;motorR22,417
+  Position *position;position23,436
+  unsigned long state;state25,459
+  unsigned long beforeState;beforeState26,482
+  PreController *preController;preController27,511
+  float distance;distance28,543
+  float angle;angle29,561
+
+main.cpp,27
+int main(void){main9,111
+
+Position.cpp,746
+static int dirA;dirA6,91
+static int dirB;dirB7,109
+static struct timeval nowA;nowA8,127
+static struct timeval oldA;oldA9,156
+static struct timeval nowB;nowB10,185
+static struct timeval oldB;oldB11,214
+static int countA;countA12,243
+static int countB;countB13,263
+void interruptCountA(void){interruptCountA19,347
+void interruptCountB(void){interruptCountB36,640
+Position* Position::_instance = 0;_instance51,942
+Position* Position::getInstance(int pinA, int pinB){getInstance54,982
+Position::Position(int pinA, int pinB) :Position62,1135
+void Position::reset(void){reset85,1575
+void Position::getPosition(float* distance, float* angle){getPosition90,1639
+void Position::setDir(int indirA, int indirB)setDir106,1933
+
+Position.h,348
+#define __POSITION_H____POSITION_H__2,24
+#define DIR_CW DIR_CW4,50
+#define DIR_CCW DIR_CCW5,70
+class Position{Position7,94
+  const float COUNT_TO_M = 2.0F / 203.0F / 8.0F;COUNT_TO_M9,122
+  const float L = 10.0F;  //10cmL10,172
+  float angle;angle11,206
+  float distance;distance12,222
+  static Position* _instance;_instance18,301
+
+PreEvent.cpp,267
+#define ABS_FLOAT(ABS_FLOAT14,257
+int kbhit(void){kbhit16,308
+char getch(){getch42,809
+PreEvent::PreEvent(Position *position) :PreEvent73,1520
+void PreEvent::updatePreEvent(){updatePreEvent87,1738
+unsigned long PreEvent::getPreEvent(){getPreEvent156,2994
+
+PreEvent.h,487
+#define __EVENT_H____EVENT_H__9,125
+#define E_UP E_UP14,195
+#define E_DOWN E_DOWN15,237
+#define E_LEFT E_LEFT16,281
+#define E_RIGHT E_RIGHT17,325
+#define E_CHANGE_DISTANCE E_CHANGE_DISTANCE18,370
+#define E_CHANGE_ANGLE E_CHANGE_ANGLE19,425
+class PreEvent{PreEvent21,479
+  Position* position;position28,609
+  unsigned long event;event29,632
+  PreController *preController;preController30,656
+  float distanceOld;distanceOld32,691
+  float angleOld;angleOld33,713
+
+rctank.cpp,283
+#define PWM_RANGE PWM_RANGE2,20
+DcMotor:: DcMotor(int pinA, int pinB)DcMotor4,43
+DcMotor:: ~DcMotor()~DcMotor13,191
+void DcMotor::pwmWrite(double ratio)pwmWrite18,218
+void ChangeDriveMode(Mode mode, int voltage_level, DcMotor *motorL, DcMotor *motorR)ChangeDriveMode38,669
+
+rctank.h,251
+#define __RCTANK____RCTANK__2,19
+    STOP,STOP9,98
+    FORWARD,FORWARD10,108
+    BACKWARD,BACKWARD11,121
+    CW,CW12,135
+    CCWCCW13,143
+} Mode;Mode14,151
+class DcMotorDcMotor16,160
+    int pin1;pin124,262
+    int pin2;pin225,276

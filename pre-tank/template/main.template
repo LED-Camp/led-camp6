@@ -1,0 +1,54 @@
+<%def getClasses(){return u.classes.findAll{it.stereotypes.length==0}}%>\
+#include <iostream>
+#include <time.h>
+#include "PreEvent.h"
+#include "PreController.h"
+#include <sys/time.h>
+
+<% for(c in getClasses()){ %>\
+#include "${c.name}.h"
+<%}%>
+
+int main(void){
+  struct timeval now;
+  struct timeval old;
+
+  PreController *precontroller;
+  PreEvent *preEvent;
+  float n;
+
+<% for(c in getClasses()){ %>\
+  ${c.name} *${u.getInstanceName(c)};
+<%}%>\
+  precontroller = PreController::getInstance();
+
+<% for(c in getClasses()){ %>\
+  ${u.getInstanceName(c)} = new ${c.name}(precontroller);
+<%}%>\
+
+  preEvent = new PreEvent(precontroller);
+
+  gettimeofday(&now, NULL);
+  gettimeofday(&old, NULL);
+
+  while(true){
+    while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
+      gettimeofday(&now, NULL);
+    }
+    old = now;
+
+    preEvent->updatePreEvent();
+
+<% for(c in getClasses()){ %>\
+    ${u.getInstanceName(c)}->execState();
+<%}%>\
+<% for(c in getClasses()){ %>\
+    ${u.getInstanceName(c)}->doTransition(preEvent->getPreEvent());
+<%}%>\
+  }
+
+<% for(c in getClasses()){ %>\
+  delete ${u.getInstanceName(c)};
+<%}%>\
+  delete preEvent;
+}

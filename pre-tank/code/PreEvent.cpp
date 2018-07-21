@@ -6,7 +6,7 @@
  */
 #include "stdio.h"
 #include "PreEvent.h"
-#include "PreController.h"
+#include "Controller.h"
 
 #define ABS_FLOAT(a) ((a) < 0.0F?(a)*-1.0F:(a))
 
@@ -19,12 +19,12 @@
  * @return -
  * @sa -
  */
-PreEvent::PreEvent(PreController *precontroller) :
+PreEvent::PreEvent(Controller *controller) :
   distanceOld(0.0F),
   angleOld(0.0F)
 {
   this->event = 0;
-  this->precontroller = precontroller;
+  this->controller = controller;
 }
 
 /**
@@ -34,7 +34,6 @@ PreEvent::PreEvent(PreController *precontroller) :
  * @sa -
  */
 void PreEvent::updatePreEvent(){
-  char c;
   float distance;
   float angle;
 
@@ -45,7 +44,7 @@ void PreEvent::updatePreEvent(){
   interruptCountA();
   interruptCountB();
 
-  precontroller->getPosition(&distance, &angle);
+  controller->getPosition(&distance, &angle);
 
   absDistanceDiff = ABS_FLOAT(this->distanceOld - distance);
   absAngleDiff = ABS_FLOAT(this->angleOld - angle);

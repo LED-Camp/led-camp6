@@ -8,7 +8,7 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 
-class PreController;
+class Controller;
 
 #define E_UP ((unsigned long)0x00000001)
 #define E_DOWN ((unsigned long)0x00000002)
@@ -22,13 +22,13 @@ class PreController;
 
 class PreEvent{
 public:
-  PreEvent(PreController *precontroller);
+  PreEvent(Controller *controller);
   void updatePreEvent();
   unsigned long getPreEvent();
 
  private:
   unsigned long event;
-  PreController *precontroller;
+  Controller *controller;
 
   float distanceOld;
   float angleOld;

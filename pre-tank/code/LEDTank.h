@@ -1,28 +1,29 @@
-#ifndef __PreTank__
-#define __PreTank__
+#ifndef __LEDTank__
+#define __LEDTank__
 
-#include "PreController.h"
+#include "Controller.h"
 
 #define _STATE_INITIAL 0x00000000
 #define STATE_FORWARD ((unsigned long)1)
-#define STATE_STOP ((unsigned long)2)
-#define STATE_TURN ((unsigned long)3)
+#define STATE_TURN ((unsigned long)2)
+#define STATE_INIT ((unsigned long)3)
+#define STATE_STOP ((unsigned long)4)
 
 class PreController;
 
-class PreTank{
+class LEDTank{
  public:
-  PreTank(PreController *precontroller);
+  LEDTank(Controller *controller);
   void execState();
   void doTransition(unsigned long event);
 
  private:
-  PreController *precontroller;
+  Controller *controller;
   unsigned long state;
   unsigned long beforeState;
-  PreController *preController;
   float distance;
   float angle;
+  int cnt;
 };
 
 #endif

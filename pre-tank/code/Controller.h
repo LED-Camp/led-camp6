@@ -1,21 +1,21 @@
-#ifndef __PRECONTROLLER__
-#define __PRECONTROLLER__
+#ifndef __CONTROLLER__
+#define __CONTROLLER__
 
 #include "Motor.h"
 #include "Position.h"
 
-class PreController{
+class Controller{
  private:
   Motor *motor;
   Position *position;
 
  protected:
-  PreController(void);
+  Controller(void);
 
  public:
-  static PreController* _instance;
+  static Controller* _instance;
 
-  static PreController* getInstance(void);
+  static Controller* getInstance(void);
 
   // Positionån
   void reset(void);
@@ -23,7 +23,7 @@ class PreController{
   void setDir(int indirA, int indirB);
 
   // Motorån
-  void ChangeDriveMode(Mode mode, int voltage_level);
+  void changeDriveMode(Mode mode, int voltage_level);
 };
 
 

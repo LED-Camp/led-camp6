@@ -1,6 +1,8 @@
 #ifndef __MOTOR__
 #define __MOTOR__
 
+class Position;
+
 typedef enum{
   STOP,
   FORWARD,
@@ -17,7 +19,7 @@ class Motor
   Motor(void);
  public:
   static Motor* getInstance(void);
-  void ChangeDriveMode(Mode mode, int voltage_level);
+  void changeDriveMode(Mode mode, int voltage_level, Position* position);
 };
 
 #endif

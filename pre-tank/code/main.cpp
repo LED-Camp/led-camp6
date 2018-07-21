@@ -1,26 +1,25 @@
 #include <iostream>
 #include <time.h>
 #include "PreEvent.h"
-#include "PreController.h"
+#include "Controller.h"
 #include <sys/time.h>
 
-#include "PreTank.h"
+#include "LEDTank.h"
 
 
 int main(void){
   struct timeval now;
   struct timeval old;
 
-  PreController *precontroller;
+  Controller *controller;
   PreEvent *preEvent;
-  float n;
 
-  PreTank *preTank;
-  precontroller = PreController::getInstance();
+  LEDTank *lEDTank;
+  controller = Controller::getInstance();
 
-  preTank = new PreTank(precontroller);
+  lEDTank = new LEDTank(controller);
 
-  preEvent = new PreEvent(precontroller);
+  preEvent = new PreEvent(controller);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
@@ -33,10 +32,10 @@ int main(void){
 
     preEvent->updatePreEvent();
 
-    preTank->execState();
-    preTank->doTransition(preEvent->getPreEvent());
+    lEDTank->execState();
+    lEDTank->doTransition(preEvent->getPreEvent());
   }
 
-  delete preTank;
+  delete lEDTank;
   delete preEvent;
 }

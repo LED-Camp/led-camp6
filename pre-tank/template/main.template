@@ -2,7 +2,7 @@
 #include <iostream>
 #include <time.h>
 #include "PreEvent.h"
-#include "PreController.h"
+#include "Controller.h"
 #include <sys/time.h>
 
 <% for(c in getClasses()){ %>\
@@ -13,20 +13,19 @@ int main(void){
   struct timeval now;
   struct timeval old;
 
-  PreController *precontroller;
+  Controller *controller;
   PreEvent *preEvent;
-  float n;
 
 <% for(c in getClasses()){ %>\
   ${c.name} *${u.getInstanceName(c)};
 <%}%>\
-  precontroller = PreController::getInstance();
+  controller = Controller::getInstance();
 
 <% for(c in getClasses()){ %>\
-  ${u.getInstanceName(c)} = new ${c.name}(precontroller);
+  ${u.getInstanceName(c)} = new ${c.name}(controller);
 <%}%>\
 
-  preEvent = new PreEvent(precontroller);
+  preEvent = new PreEvent(controller);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);

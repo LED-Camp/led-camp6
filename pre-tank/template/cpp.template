@@ -5,10 +5,10 @@
 #include "PreEvent.h"
 #include "${u.name}.h"
 
-${u.name}::${u.name}(PreController *precontroller){
+${u.name}::${u.name}(Controller *controller){
   this->state = _STATE_INITIAL;
 
-  this->precontroller = precontroller;
+  this->controller = controller;
 
 <% for(var in u.iclass.getAttributes()){%>\
 <% if(var.getAssociation() == null){%>\

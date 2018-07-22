@@ -7,6 +7,7 @@
 #include "iostream"
 #include "PreEvent.h"
 #include "Position.h"
+#include "CNetMqtt.h"
 #include <unistd.h>   //_getch
 #include <termios.h>  //_getch
 #include <fcntl.h>
@@ -72,8 +73,11 @@ char getch(){
  */
 PreEvent::PreEvent(Position *position) :
   distanceOld(0.0F),
-  angleOld(0.0F)
+  angleOld(0.0F),
+  netMqtt(CNetMqtt::getInstance())
 {
+  netMqtt.initConnect("PLAYER","127.0.0.1");
+  netMqtt.subscrTopic("hoge");
   this->event = 0;
   this->position = position;
 }
@@ -138,6 +142,14 @@ void PreEvent::updatePreEvent(){
     this->event |= E_CHANGE_ANGLE;
   }else{
     this->event &= ~E_CHANGE_ANGLE;
+  }
+
+  _enMsgId_t enMsg;
+  netMqtt.dequeueMessage(&enMsg);
+  if(enMsg!=RET_FAILED){
+    this->event |= E_SUBSCRIBE;
+  }else{
+    this->event &= E_SUBSCRIBE;
   }
 
   printf("distance=%lf, angle=%lf\n", distance, angle);

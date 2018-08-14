@@ -8,6 +8,7 @@
 #define STATE_TURN ((unsigned long)2)
 #define STATE_INIT ((unsigned long)3)
 #define STATE_STOP ((unsigned long)4)
+#define STATE_SLOW ((unsigned long)5)
 
 class PreController;
 

@@ -7,9 +7,10 @@
 
 #ifndef __EVENT_H__
 #define __EVENT_H__
-#include "Position.h"
 
-class PreController;
+#include <cstdint>
+
+class Controller;
 
 #define E_UP ((unsigned long)0x00000001)
 #define E_DOWN ((unsigned long)0x00000002)
@@ -17,20 +18,26 @@ class PreController;
 #define E_RIGHT ((unsigned long)0x00000008)
 #define E_CHANGE_DISTANCE ((unsigned long)0x00000010)
 #define E_CHANGE_ANGLE ((unsigned long)0x00000020)
+#define E_CHANGE_RANGING ((unsigned long)0x00000040)
+#define E_REACH ((unsigned long)0x00000080)
 
-class PreEvent{
+
+#define TRUE (1)
+#define FALSE (0)
+
+class Event {
 public:
-  PreEvent(Position* position);
-  void updatePreEvent();
-  unsigned long getPreEvent();
+    Event(Controller* controller);
+    void updateEvent();
+    unsigned long getEvent();
 
- private:
-  Position* position;
-  unsigned long event;
-  PreController *preController;
+private:
+    Controller* controller;
+    unsigned long event;
 
-  float distanceOld;
-  float angleOld;
+    float distanceOld;
+    float angleOld;
+    uint16_t rangingDistanceOld;
 };
 
 #endif

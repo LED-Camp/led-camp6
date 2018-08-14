@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "PreEvent.h"
+#include "Event.h"
 #include "LEDTank.h"
 
 LEDTank::LEDTank(Controller *controller){
@@ -26,6 +26,9 @@ void LEDTank::execState(){
   case STATE_STOP:
     
     break;
+  case STATE_SLOW:
+    controller->getPosition(&distance, &angle);
+    break;
   default:
     break;
   }
@@ -44,7 +47,7 @@ void LEDTank::doTransition(unsigned long event){
     break;
   case STATE_FORWARD:
 
-    if(((event & E_CHANGE_DISTANCE) != 0) && (distance > 100.0)){
+    if(((event & E_CHANGE_RANGING) != 0) ){
 
       // exit
       
@@ -52,12 +55,13 @@ void LEDTank::doTransition(unsigned long event){
       //action
       
 
-      this->state = STATE_TURN;
+      this->state = STATE_SLOW;
 
       //entry
-      printf("[TURN]\n");
+      printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(CW, 5);
+controller->changeDriveMode(FORWARD, 3);
+cnt++;
     }
     break;
   case STATE_TURN:
@@ -115,6 +119,24 @@ cnt++;
     }
     break;
   case STATE_STOP:
+    break;
+  case STATE_SLOW:
+
+    if(((event & E_REACH) != 0) ){
+
+      // exit
+      
+
+      //action
+      
+
+      this->state = STATE_TURN;
+
+      //entry
+      printf("[TURN]\n");
+controller->reset();
+controller->changeDriveMode(CW, 5);
+    }
     break;
   default:
     break;

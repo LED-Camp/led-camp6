@@ -1,31 +1,25 @@
 #include <iostream>
-#include <time.h>
-#include "PreEvent.h"
-#include "Position.h"
 #include <sys/time.h>
-
+#include <time.h>
+#include "Event.h"
 #include "Controller.h"
+
+#include "LEDTank.h"
 
 
 int main(void){
   struct timeval now;
   struct timeval old;
 
-  Position *position;
-  PreEvent *preEvent;
-  float n;
-
   Controller *controller;
+  Event *event;
 
-  if( wiringPiSetupGpio() < 0){ //initialize failed
-    return 1;
-  }
+  LEDTank *lEDTank;
+  controller = Controller::getInstance();
 
-  position = Position::getInstance(2, 3);
+  lEDTank = new LEDTank(controller);
 
-  controller = new Controller(position);
-
-  preEvent = new PreEvent(position);
+  event = new Event(controller);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
@@ -36,12 +30,12 @@ int main(void){
     }
     old = now;
 
-    preEvent->updatePreEvent();
+    event->updateEvent();
 
-    controller->execState();
-    controller->doTransition(preEvent->getPreEvent());
+    lEDTank->execState();
+    lEDTank->doTransition(event->getEvent());
   }
 
-  delete controller;
-  delete preEvent;
+  delete lEDTank;
+  delete event;
 }

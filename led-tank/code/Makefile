@@ -10,6 +10,7 @@ OBJDIR		= .
 SRCDIR		= .
 
 #INCLUDES	= -I..
+
 INCLUDES	= -I../../VL53L0X_rasp/platform/inc
 INCLUDES	+= -I../../VL53L0X_1.0.2/Api/core/inc
 LIBS		= -lwiringPi -lpthread

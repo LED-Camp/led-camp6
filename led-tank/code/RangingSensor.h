@@ -16,10 +16,9 @@ class RangingSensor
   static RangingSensor* _instance;
 
   static RangingSensor* getInstance();
-
   void Initialize();
   float getRanging();
-
+  
  private:
   VL53L0X_Dev_t m_device;
   VL53L0X_Dev_t* pm_device = &m_device;

@@ -8,7 +8,6 @@ RangingSensor::RangingSensor()
 
 RangingSensor::~RangingSensor()
 {
-
 }
 
 RangingSensor* RangingSensor::_instance = 0;
@@ -80,9 +79,6 @@ void RangingSensor::Initialize()
     {
       status = VL53L0X_StartMeasurement(pm_device);
     }
-
-
-
 }
 
 

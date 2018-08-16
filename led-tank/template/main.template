@@ -1,9 +1,9 @@
 <%def getClasses(){return u.classes.findAll{it.stereotypes.length==0}}%>\
 #include <iostream>
-#include <time.h>
-#include "PreEvent.h"
-#include "Position.h"
 #include <sys/time.h>
+#include <time.h>
+#include "Event.h"
+#include "Controller.h"
 
 <% for(c in getClasses()){ %>\
 #include "${c.name}.h"
@@ -13,25 +13,19 @@ int main(void){
   struct timeval now;
   struct timeval old;
 
-  Position *position;
-  PreEvent *preEvent;
-  float n;
+  Controller *controller;
+  Event *event;
 
 <% for(c in getClasses()){ %>\
   ${c.name} *${u.getInstanceName(c)};
 <%}%>\
-
-  if( wiringPiSetupGpio() < 0){ //initialize failed
-    return 1;
-  }
-
-  position = Position::getInstance(17, 27);
+  controller = Controller::getInstance();
 
 <% for(c in getClasses()){ %>\
-  ${u.getInstanceName(c)} = new ${c.name}(position);
+  ${u.getInstanceName(c)} = new ${c.name}(controller);
 <%}%>\
 
-  preEvent = new PreEvent(position);
+  event = new Event(controller);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
@@ -42,18 +36,18 @@ int main(void){
     }
     old = now;
 
-    preEvent->updatePreEvent();
+    event->updateEvent();
 
 <% for(c in getClasses()){ %>\
     ${u.getInstanceName(c)}->execState();
 <%}%>\
 <% for(c in getClasses()){ %>\
-    ${u.getInstanceName(c)}->doTransition(preEvent->getPreEvent());
+    ${u.getInstanceName(c)}->doTransition(event->getEvent());
 <%}%>\
   }
 
 <% for(c in getClasses()){ %>\
   delete ${u.getInstanceName(c)};
 <%}%>\
-  delete preEvent;
+  delete event;
 }

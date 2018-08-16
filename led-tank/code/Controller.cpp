@@ -26,12 +26,6 @@ void Controller::getPosition(float* distance, float* angle) {
     position->getPosition(distance, angle);
 }
 
-<<<<<<< HEAD
-=======
-void Controller::setDir(int indirA, int indirB) {
-    position->setDir(indirA, indirB);
-}
->>>>>>> 8fde969b4b68ff34cb8f800ab3b89468f60f6319
 
 void Controller::changeDriveMode(Mode mode, int voltage_level) {
     twinWheelDriver->changeDriveMode(mode, voltage_level, position);

@@ -40,7 +40,6 @@ int main(void){
 
     lEDTank->execState();
     lEDTank->doTransition(event->getEvent());
-
   }
 
   delete lEDTank;

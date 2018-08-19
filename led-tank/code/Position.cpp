@@ -35,7 +35,7 @@ void interruptCountA(void){
 
 void interruptCountB(void){
   gettimeofday(&nowB, NULL);
-
+  
   if((nowB.tv_sec - oldB.tv_sec) + (nowB.tv_usec - oldB.tv_usec)*1.0E-6 > 5.0*1.0E-6){
     if(dirB == DIR_CW){
       countB++;

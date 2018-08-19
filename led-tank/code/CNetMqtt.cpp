@@ -5,9 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>    // sleep()
-
+#include <string>
 #include "MQTTClient.h"
 #include "CNetMqtt.h"
+#include "CommonDefine.h"
+
+using namespace std;
+
+string Payload;
 
 
 /* --------------------------------------------------------------- */
@@ -123,6 +128,7 @@ CNetMqtt::~CNetMqtt()
 
     return;
 }
+
 
 
 /* *************************************************************** */
@@ -498,23 +504,23 @@ int CNetMqtt::siArrived(
         if (1 == pstMsg->payloadlen) {
             printf("\tpayload: 0x%02x\n", *(char*)pstMsg->payload);
         }
-        printf("\tTopic: %s\n", pszTopic);
-        printf("\tm_Topic: %s\n", pOwn->m_szTopic);
+        printf("Topic: %s\n", pszTopic);
+        printf("m_Topic: %s\n", pOwn->m_szTopic);
 #endif /* _DEBUG */
 
     pszPayload = (char*)pstMsg->payload;
 
     // 自身がPlayerでPlayerが発行したメッセージを受け取った場合
-    if ((ROLE_PLAYER & *pszPayload) == pOwn->m_enRole) {
-        goto exit;
-    }
+    // if ((ROLE_PLAYER & *pszPayload) == pOwn->m_enRole) {
+    //     goto exit;
+    // }
     // 自身がJudgeでJudgeが発行したメッセージを受け取った場合
     if ((ROLE_JUDGE & *pszPayload) == pOwn->m_enRole) {
         goto exit;
     }
 
     j = 0;
-    for (i = 0; pstMsg->payloadlen > i; ++i) {
+    for (i = 0; pstMsg->payloadlen >= i; ++i) {
         /* payloadが大きすぎる場合 */
         if (SIZE_CONTENT - 1 < i) {
             iRet = RET_FALSE;
@@ -523,7 +529,7 @@ int CNetMqtt::siArrived(
 
         /* メッセージIDの処理 */
         if (0 == i) {
-            enMsgId = (enMsgId_t)*pszPayload++;
+            enMsgId = (enMsgId_t)*pszPayload;
         }
         /* メッセージID以外 */
         else {
@@ -533,7 +539,7 @@ int CNetMqtt::siArrived(
     szContent[j] = '\0';
 
     /* コンテンツのコピー */
-    if (SIZE_CONTENT > j) {
+    if (SIZE_CONTENT >= j) {
         strncpy(pOwn->m_szContent, szContent, j + 1);
 #ifdef _DEBUG
         printf("[siArrived] Copy Content: %s\n", pOwn->m_szContent);
@@ -544,6 +550,12 @@ int CNetMqtt::siArrived(
     /* NOTE: 関数ポインタにする？ */
     pOwn->siEnqueueMessage(enMsgId);
     pOwn->voProcUniqMessage(enMsgId, szContent);
+    //ペイロードの更新
+    Payload = szContent;
+
+
+    
+
 
 exit:
     /* メッセージメモリの解放 */
@@ -582,7 +594,7 @@ void CNetMqtt::voLostConnection(
 
     for (iCntRetry = 0; MAX_RETRY_CONN > iCntRetry; ++iCntRetry) {
 #ifdef _DEBUG
-        printf("[voLostConnection] Reconnecting... (%d/%d)\n", iCntRetry + 1, MAX_RETRY_CONN);
+        printf("[voLostConnection] Reconnectings... (%d/%d)\n", iCntRetry + 1, MAX_RETRY_CONN);
 #endif /* _DEBUG */
         iRet = ((CNetMqtt*)pvContext)->siConnectBroker();
         if (RET_SUCCESS == iRet) {
@@ -600,59 +612,60 @@ void CNetMqtt::voLostConnection(
 
 
 void CNetMqtt::voProcUniqMessage(
-    enMsgId_t enMsgId,
-    const char* pcszContent)
+     enMsgId_t enMsgId,
+     const char* pcszContent)
 {
-    switch(enMsgId) {
-        case PLAYER_HELLO:
-            printf("PLAYER_HELLO\n");
-            break;
-        case PLAYER_UPDATE:
-            printf("PLAYER_UPDATE\n");
-            break;
-        case PLAYER_START:
-            printf("PLAYER_START\n");
-            break;
-        case PLAYER_ABORT:
-            printf("PLAYER_ABORT\n");
-            break;
-        case PLAYER_BYE:
-            printf("PLAYER_BYE\n");
-            break;
-        case JUDGE_HELLO:
-            printf("JUDGE_HELLO\n");
-            break;
-        case JUDGE_BUSY:
-            printf("JUDGE_BUSY\n");
-            break;
-        case JUDGE_DEAL:
-            printf("JUDGE_DEAL\n");
-            break;
-        case JUDGE_ACK:
-            printf("JUDGE_ACK\n");
-            break;
-        case JUDGE_NACK:
-            printf("JUDGE_NACK\n");
-            break;
-        case JUDGE_OK:
-            printf("JUDGE_OK\n");
-            break;
-        case JUDGE_NG:
-            printf("JUDGE_NG\n");
-            break;
-        case JUDGE_TIMEOUT:
-            printf("JUDGE_TIMEOUT\n");
-            break;
-        case JUDGE_BYE:
-            printf("JUDGE_BYE\n");
-            break;
-        default:
-            printf("UNKNOWN MESSAGE ID!! (0x%02x)\n", enMsgId);
-            break;
-            /* ここには来ない */
-    } // switch
+// {
+//     switch(enMsgId) {
+//         case PLAYER_HELLO:
+//             printf("PLAYER_HELLO\n");
+//             break;
+//         case PLAYER_UPDATE:
+//             printf("PLAYER_UPDATE\n");
+//             break;
+//         case PLAYER_START:
+//             printf("PLAYER_START\n");
+//             break;
+//         case PLAYER_ABORT:
+//             printf("PLAYER_ABORT\n");
+//             break;
+//         case PLAYER_BYE:
+//             printf("PLAYER_BYE\n");
+//             break;
+//         case JUDGE_HELLO:
+//             printf("JUDGE_HELLO\n");
+//             break;
+//         case JUDGE_BUSY:
+//             printf("JUDGE_BUSY\n");
+//             break;
+//         case JUDGE_DEAL:
+//             printf("JUDGE_DEAL\n");
+//             break;
+//         case JUDGE_ACK:
+//             printf("JUDGE_ACK\n");
+//             break;
+//         case JUDGE_NACK:
+//             printf("JUDGE_NACK\n");
+//             break;
+//         case JUDGE_OK:
+//             printf("JUDGE_OK\n");
+//             break;
+//         case JUDGE_NG:
+//             printf("JUDGE_NG\n");
+//             break;
+//         case JUDGE_TIMEOUT:
+//             printf("JUDGE_TIMEOUT\n");
+//             break;
+//         case JUDGE_BYE:
+//             printf("JUDGE_BYE\n");
+//             break;
+//         default:
+//             printf("UNKNOWN MESSAGE ID!! (0x%02x)\n", enMsgId);
+//             break;
+//             /* ここには来ない */
+//     } // switch
 
-    return;
+//    return;
 }
 
 /* ***** デバッグ用関数 ***** */

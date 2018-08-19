@@ -3,6 +3,7 @@
 
 #include "rctank.h"
 #include "Position.h"
+#include "Score.h"
 
 #define _STATE_INITIAL 0x00000000
 #define STATE_FORWARD ((unsigned long)1)
@@ -10,6 +11,7 @@
 #define STATE_LEFT ((unsigned long)3)
 #define STATE_RIGHT ((unsigned long)4)
 #define STATE_STOP ((unsigned long)5)
+#define STATE_SUBSCRIBE ((unsigned long)10)
 
 class PreController;
 
@@ -18,6 +20,8 @@ class Controller{
   Controller(Position *position);
   void execState();
   void doTransition(unsigned long event);
+  Score score;
+	      
 
  private:
   DcMotor *motorL;

@@ -4,7 +4,8 @@
 #define __COMMON_DEFINE_H__
 
 /* *** ファイルインクルード *** */
-
+#include <string>
+using namespace std;
 
 /* *** 定数定義 *** */
 #define RET_SUCCESS  (0)                    // 戻り値: 成功
@@ -17,6 +18,9 @@
 
 #define RET_UNINIT   (1)
 #define RET_ERR_UNINIT (0)
+
+
+
 
 /* *** 型定義 *** */
 typedef enum _enLedSliderPos_t {
@@ -68,5 +72,8 @@ typedef enum _enMsgId_t {
 #define ARRAY_SIZE(x)      (sizeof(x) / sizeof(x[0]))
 #define NUM_DEFAULT_COLOR  (COL_LAST - COL_BASE + 1)
 #define INDEX_COLOR(x)     ((x) - COL_BASE)
+
+//グローバル変数
+extern string Payload;
 
 #endif /* __COMMON_DEFINE_H__ */

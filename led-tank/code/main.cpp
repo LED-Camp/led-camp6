@@ -13,7 +13,6 @@ int main(void){
 
   Position *position;
   PreEvent *preEvent;
-  float n;
 
   Controller *controller;
 

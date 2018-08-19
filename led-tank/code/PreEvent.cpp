@@ -7,7 +7,6 @@
 #include "iostream"
 #include "PreEvent.h"
 #include "Position.h"
-#include "CNetMqtt.h"
 #include <unistd.h>   //_getch
 #include <termios.h>  //_getch
 #include <fcntl.h>
@@ -25,7 +24,7 @@ int kbhit(void){
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
   oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
   fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
+  
   ch = getchar();
 
   tcsetattr(STDIN_FILENO, F_SETFL, &oldt);
@@ -73,11 +72,10 @@ char getch(){
  */
 PreEvent::PreEvent(Position *position) :
   distanceOld(0.0F),
-  angleOld(0.0F),
-  netMqtt(CNetMqtt::getInstance())
+  angleOld(0.0F) 
 {
-  netMqtt.initConnect("PLAYER","127.0.0.1");
-  netMqtt.subscrTopic("hoge");
+  netMqtt = CNetMqtt::getInstance();
+  netMqtt.initConnect("PLAYER","192.168.11.9");  
   this->event = 0;
   this->position = position;
 }
@@ -95,6 +93,9 @@ void PreEvent::updatePreEvent(){
 
   float absDistanceDiff;
   float absAngleDiff;
+
+  _enMsgId_t enMsg;
+  
 
   if(kbhit()){
     c = getchar();
@@ -144,9 +145,8 @@ void PreEvent::updatePreEvent(){
     this->event &= ~E_CHANGE_ANGLE;
   }
 
-  _enMsgId_t enMsg;
-  netMqtt.dequeueMessage(&enMsg);
-  if(enMsg!=RET_FAILED){
+  if((netMqtt.subscrTopic("LED-Camp/point") == RET_SUCCESS) &&
+     (netMqtt.dequeueMessage(&enMsg) != RET_FAILED)){
     this->event |= E_SUBSCRIBE;
   }else{
     this->event &= ~E_SUBSCRIBE;

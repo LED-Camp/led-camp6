@@ -8,6 +8,7 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 #include "Position.h"
+#include "CNetMqtt.h"
 
 class PreController;
 class CNetMqtt;
@@ -25,7 +26,7 @@ public:
   PreEvent(Position* position);
   void updatePreEvent();
   unsigned long getPreEvent();
-  CNetMqtt &netMqtt;
+  CNetMqtt netMqtt;
 
  private:
   Position* position;

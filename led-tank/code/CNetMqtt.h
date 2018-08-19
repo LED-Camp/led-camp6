@@ -5,7 +5,7 @@
 
 /* *** ファイルインクルード *** */
 #include "CommonDefine.h"
-#include <MQTTClient.h>  // MQTTClient_deliveryToken, MQTTClient_message etc.
+#include "/usr/local/include/MQTTClient.h"  // MQTTClient_deliveryToken, MQTTClient_message etc.
 //#include "CSingleton.h"
 
 /* *** 定数定義 *** */
@@ -30,77 +30,79 @@
 
 /* *** マクロ関数 *** */
 #define NEXT_INDEX(x)   (((x) + 1) % SIZE_QUEUE)
-
+/* #define _DEBUG */
 class CNetMqtt {
     /* Variables */
-    public:
-    private:
-        bool          m_bConenct;                   // 接続状態
-        char          m_szTopic[SIZE_TOPIC];        // トピック名
-        char          m_szBrokerAddr[SIZE_ADDR];    // 接続先アドレス
-        //const int     m_ciQos = MQTT_QOS;           // QOS
-        MQTTClient    m_pClient;                    // クライアント
-        enRole_t      m_enRole;                     // 役割
-        enMsgId_t     m_enMsgIds[SIZE_QUEUE];
-        int           m_iQueHead;
-        int           m_iQueTail;
-        char          m_szContent[SIZE_CONTENT];    // コンテンツ
+ public:
+ private:
+    bool          m_bConenct;                   // 接続状態
+    char          m_szTopic[SIZE_TOPIC];        // トピック名
+    char          m_szBrokerAddr[SIZE_ADDR];    // 接続先アドレス
+    //const int     m_ciQos = MQTT_QOS;           // QOS
+    MQTTClient    m_pClient;                    // クライアント
+    enRole_t      m_enRole;                     // 役割
+    enMsgId_t     m_enMsgIds[SIZE_QUEUE];
+    int           m_iQueHead;
+    int           m_iQueTail;
+    char          m_szContent[SIZE_CONTENT];    // コンテンツ
 
 
-        MQTTClient_message                  m_stPubMsg      // 発行メッセージ
-            = MQTTClient_message_initializer;
-        volatile MQTTClient_deliveryToken   m_iDelivered;   // 配送完了トークン
+    MQTTClient_message                  m_stPubMsg      // 発行メッセージ
+        = MQTTClient_message_initializer;
+    volatile MQTTClient_deliveryToken   m_iDelivered;   // 配送完了トークン
     /* Functions */
-    public:
-        // dead code
-        //CNetMqtt(const char* pcszClientId, const char* pszDestAddr, int iPort = 1883);
-        //~CNetMqtt();
+ public:
 
-        /* *** APIs *** */
+    // dead code
+    /* CNetMqtt(const char* pcszClientId, const char* pszDestAddr, int iPort = 1883); */
+    /* ~CNetMqtt(); */
 
-        /* インスタンスの取得 */
-        static CNetMqtt& getInstance(void);
 
-        /* 接続の初期設定 */
-        int initConnect(const char* pcszClientId, const char* pszDestAddr, int iPort = 1883);
+    /* *** APIs *** */
 
-        /* トピックの設定 */
-        int setTopic(const char* pcszTopic);
-        /* トピックの取得 */
-        int getTopic(char* pszTopic, const int iLenTopic);
+    /* インスタンスの取得 */
+    static CNetMqtt& getInstance(void);
 
-        /* トピックの購読開始 */
-        int subscrTopic(const char* pcszToic);
+    /* 接続の初期設定 */
+    int initConnect(const char* pcszClientId, const char* pszDestAddr, int iPort = 1883);
 
-        /* トピックの購読解除 */
-        /* TODO: 実装 */
+    /* トピックの設定 */
+    int setTopic(const char* pcszTopic);
+    /* トピックの取得 */
+    int getTopic(char* pszTopic, const int iLenTopic);
 
-        /* メッセージの発行 */
-        int publishMessage(enMsgId_t enMsgId, const char* pcszMsg = NULL);
+    /* トピックの購読開始 */
+    int subscrTopic(const char* pcszToic);
 
-        int dequeueMessage(enMsgId_t* penMsgId);
+    /* トピックの購読解除 */
+    /* TODO: 実装 */
 
-        /* コンテンツの取得 */
-        int getContent(char* pszContent, int iLenContent);
+    /* メッセージの発行 */
+    int publishMessage(enMsgId_t enMsgId, const char* pcszMsg = NULL);
+
+    int dequeueMessage(enMsgId_t* penMsgId);
+
+    /* コンテンツの取得 */
+    int getContent(char* pszContent, int iLenContent);
+    CNetMqtt();
+    ~CNetMqtt();
+
 
 #ifdef _DEBUG
-        void dbgDisconnect(void);
-        void dbgSetRole(enRole_t);
+    void dbgDisconnect(void);
+    void dbgSetRole(enRole_t);
 #endif /* _DEBUG */
-    private:
-        CNetMqtt();
-        ~CNetMqtt();
-        int siConnectBroker(void);
-        
-        /* *** コールバック関数 *** */
-        static void voDelivered(void* pvContext, MQTTClient_deliveryToken iMsg);
-        static int  siArrived(void* pvContext, char* pszTopic, int iLenTopic, MQTTClient_message* pstMsg);
-        static void voLostConnection(void* pvContext, char* pszCause);
+ private:
+    int siConnectBroker(void);
+    /* *** コールバック関数 *** */
+    static void voDelivered(void* pvContext, MQTTClient_deliveryToken iMsg);
+    static int  siArrived(void* pvContext, char* pszTopic, int iLenTopic, MQTTClient_message* pstMsg);
+    static void voLostConnection(void* pvContext, char* pszCause);
 
-        //void connectBroker(void);
-        void voProcUniqMessage(enMsgId_t enMsgId, const char* pcszContent);
-        
-        int siEnqueueMessage(enMsgId_t enMsgId);
+    //void connectBroker(void);
+    void voProcUniqMessage(enMsgId_t enMsgId, const char* pcszContent);
+
+    int siEnqueueMessage(enMsgId_t enMsgId);
 
 
 };

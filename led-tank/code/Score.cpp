@@ -27,14 +27,14 @@ static string DeleteExtra(string str){
     return str;
 }
 
-int Score::ParsePayload(string payload){
+int Score::ParsePayload(){
     regex rex("(\\-?\\d{1}),(\\-?\\d{1}),(\\-?\\d{1}),(\\-?\\d{1}),(\\d{1})");
     smatch result;
     string str_result[5];
     int i;
 
-    payload = DeleteExtra(payload);
-    if(!regex_match(payload, result, rex)){  //マッチしなければエラー
+    Payload = DeleteExtra(Payload); //このPayloadhはグローバル変数
+    if(!regex_match(Payload, result, rex)){  //マッチしなければエラー
         return 0;
     }
     // result[0]にマッチした全体

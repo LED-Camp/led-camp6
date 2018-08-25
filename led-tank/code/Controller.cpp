@@ -273,7 +273,7 @@ void Controller::doTransition(unsigned long event){
         //exit
         printf("Subscribed Message!\n");
         //action
-        if(!score.ParsePayload(Payload)){
+        if(!score.ParsePayload()){
             fprintf(stderr, "Message format is invalid\n");
         }else{
             fprintf(stderr, "Message format is OK\n");

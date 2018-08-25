@@ -13,7 +13,7 @@ public:
     ~Score();
     int* getNextScoreTable();
     int getSensorID();
-    int ParsePayload(string);
+    int ParsePayload();
 };
 
 

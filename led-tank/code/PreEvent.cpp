@@ -24,12 +24,12 @@ int kbhit(void){
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
   oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
   fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  
+
   ch = getchar();
 
   tcsetattr(STDIN_FILENO, F_SETFL, &oldt);
   fcntl(STDIN_FILENO, F_SETFL, oldf);
-  
+
   if (ch != EOF){
     ch = ungetc(ch, stdin);
     return 1;
@@ -75,9 +75,10 @@ PreEvent::PreEvent(Position *position) :
   angleOld(0.0F) 
 {
   netMqtt = CNetMqtt::getInstance();
-  netMqtt.initConnect("PLAYER","192.168.11.9");  
+  netMqtt.initConnect("PLAYER","192.168.11.9");
   this->event = 0;
   this->position = position;
+  
 }
 
 /**
@@ -95,7 +96,7 @@ void PreEvent::updatePreEvent(){
   float absAngleDiff;
 
   _enMsgId_t enMsg;
-  
+
 
   if(kbhit()){
     c = getchar();

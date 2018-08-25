@@ -3,7 +3,6 @@
 #include "PreEvent.h"
 #include "Position.h"
 #include <sys/time.h>
-#include <unistd.h>
 
 #include "Controller.h"
 
@@ -40,7 +39,6 @@ int main(void){
 
     controller->execState();
     controller->doTransition(preEvent->getPreEvent());
-    sleep(1);
   }
 
 

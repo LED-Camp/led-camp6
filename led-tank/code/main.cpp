@@ -14,6 +14,10 @@ int main(void){
   Controller *controller;
   Event *event;
 
+  if( wiringPiSetupGpio() < 0){ //initialize failed
+    return 1;
+  }
+
   LEDTank *lEDTank;
   controller = Controller::getInstance();
 

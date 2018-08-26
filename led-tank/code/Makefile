@@ -11,8 +11,8 @@ SRCDIR		= .
 
 #INCLUDES	= -I..
 
-INCLUDES	= -I../../VL53L0X_rasp/platform/inc
-INCLUDES	+= -I../../VL53L0X_1.0.2/Api/core/inc
+INCLUDES	= -I../../../VL53L0X_rasp/platform/inc
+INCLUDES	+= -I../../../VL53L0X_1.0.2/Api/core/inc
 LIBS		= -lwiringPi -lpthread
 LIBS		+= -lVL53L0X_Rasp
 
@@ -20,7 +20,7 @@ LIBS		+= -lVL53L0X_Rasp
 all: $(OBJS) $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) -L../../VL53L0X_rasp/bin -o $@ $(OBJS) $(LIBS)
+	$(CXX) -L../../../VL53L0X_rasp/bin -o $@ $(OBJS) $(LIBS)
 
 #$(OBJS): $(SRCS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

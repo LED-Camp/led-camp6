@@ -75,7 +75,7 @@ PreEvent::PreEvent(Position *position) :
   angleOld(0.0F) 
 {
   netMqtt = CNetMqtt::getInstance();
-  netMqtt.initConnect("PLAYER","192.168.11.9");
+  netMqtt.initConnect("PLAYER","192.168.179.5");
   this->event = 0;
   this->position = position;
   

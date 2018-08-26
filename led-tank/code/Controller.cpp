@@ -92,7 +92,7 @@ void Controller::doTransition(unsigned long event){
                 this->state = STATE_LEFT;
 
                 //entry
-                ChangeDriveMode(CCW, 5, motorL, motorR);
+                ChangeDriveMode(CCW, 8, motorL, motorR);
                 printf("LEFT\n");
 
             }
@@ -107,7 +107,7 @@ void Controller::doTransition(unsigned long event){
                     this->state = STATE_RIGHT;
 
                     //entry
-                    ChangeDriveMode(CW, 5, motorL, motorR);
+                    ChangeDriveMode(CW, 8, motorL, motorR);
                     printf("RIGHT\n");
                 }
         break;
@@ -122,7 +122,7 @@ void Controller::doTransition(unsigned long event){
             this->state = STATE_RIGHT;
 
             //entry
-            ChangeDriveMode(CW, 5, motorL, motorR);
+            ChangeDriveMode(CW, 8, motorL, motorR);
             printf("RIGHT\n");
         }
         else
@@ -136,7 +136,7 @@ void Controller::doTransition(unsigned long event){
                 this->state = STATE_LEFT;
 
                 //entry
-                ChangeDriveMode(CCW, 5, motorL, motorR);
+                ChangeDriveMode(CCW, 8, motorL, motorR);
                 printf("LEFT\n");
             }
             else
@@ -251,7 +251,7 @@ void Controller::doTransition(unsigned long event){
                     this->state = STATE_RIGHT;
 
                     //entry
-                    ChangeDriveMode(CW, 5, motorL, motorR);
+                    ChangeDriveMode(CW, 8, motorL, motorR);
                     printf("RIGHT\n");
                 }
                 else
@@ -265,7 +265,7 @@ void Controller::doTransition(unsigned long event){
                         this->state = STATE_LEFT;
 
                         //entry
-                        ChangeDriveMode(CCW, 5, motorL, motorR);
+                        ChangeDriveMode(CCW, 8, motorL, motorR);
                         printf("LEFT\n");
                     }
         break;

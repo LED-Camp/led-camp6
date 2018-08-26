@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <time.h>
+#include "wiringPi.h"
 #include "Event.h"
 #include "Controller.h"
 

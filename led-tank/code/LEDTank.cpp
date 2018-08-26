@@ -81,7 +81,7 @@ cnt++;
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 50);
+controller->changeDriveMode(FORWARD, 80);
 cnt++;
     }
     else
@@ -116,7 +116,7 @@ controller->changeDriveMode(STOP, 0);
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 50);
+controller->changeDriveMode(FORWARD, 80);
 cnt++;
     }
     break;

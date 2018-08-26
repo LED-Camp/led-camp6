@@ -25,6 +25,7 @@ class LEDTank{
   float distance;
   float angle;
   int cnt;
+  float ranging;
 };
 
 #endif

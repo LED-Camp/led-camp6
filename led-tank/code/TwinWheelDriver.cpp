@@ -20,8 +20,8 @@ TwinWheelDriver::TwinWheelDriver(int pin1A, int pin1B, int pin2A, int pin2B) {
 }
 
 void TwinWheelDriver::changeDriveMode(Mode mode, int voltage_level, Position* position) {
-    //voltage_level : 0`10
-    double r = ((double) voltage_level / 10);
+    //voltage_level : 0`100
+    double r = ((double) voltage_level);
 
     if (mode == STOP) {
         motorL->pwmWrite(0.0);

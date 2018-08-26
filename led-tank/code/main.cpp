@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sys/time.h>
 #include <time.h>
-#include <wiringPi.h>
 #include "Event.h"
 #include "Controller.h"
 
@@ -16,11 +15,6 @@ int main(void){
   Event *event;
 
   LEDTank *lEDTank;
-
-  if( wiringPiSetupGpio() < 0){ //initialize failed
-    return 1;
-  }
-
   controller = Controller::getInstance();
 
   lEDTank = new LEDTank(controller);

@@ -10,12 +10,14 @@ LEDTank::LEDTank(Controller *controller){
   this->distance = 0;
   this->angle = 0;
   this->cnt = 0;
+  this->ranging = 0;
 }
 
 void LEDTank::execState(){
   switch(this->state){
   case STATE_FORWARD:
     controller->getPosition(&distance, &angle);
+ranging = controller->getRanging();
     break;
   case STATE_TURN:
     controller->getPosition(&distance, &angle);
@@ -47,7 +49,7 @@ void LEDTank::doTransition(unsigned long event){
     break;
   case STATE_FORWARD:
 
-    if(((event & E_CHANGE_RANGING) != 0) ){
+    if(((event & E_CHANGE_RANGING) != 0) && (ranging < 20.0)){
 
       // exit
       
@@ -58,9 +60,9 @@ void LEDTank::doTransition(unsigned long event){
       this->state = STATE_SLOW;
 
       //entry
-      printf("[FORWARD]\n");
+      printf("[SLOW]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 3);
+controller->changeDriveMode(FORWARD, 50);
 cnt++;
     }
     break;
@@ -79,7 +81,7 @@ cnt++;
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 5);
+controller->changeDriveMode(FORWARD, 50);
 cnt++;
     }
     else
@@ -96,7 +98,7 @@ cnt++;
 
       //entry
       printf("[STOP]\n");
-controller->changeDriveMode(STOP, 5);
+controller->changeDriveMode(STOP, 0);
     }
     break;
   case STATE_INIT:
@@ -114,7 +116,7 @@ controller->changeDriveMode(STOP, 5);
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 5);
+controller->changeDriveMode(FORWARD, 50);
 cnt++;
     }
     break;
@@ -135,7 +137,7 @@ cnt++;
       //entry
       printf("[TURN]\n");
 controller->reset();
-controller->changeDriveMode(CW, 5);
+controller->changeDriveMode(CW, 50);
     }
     break;
   default:

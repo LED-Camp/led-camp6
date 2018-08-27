@@ -9,6 +9,7 @@
 #define __EVENT_H__
 
 #include <cstdint>
+#include "wiringPi.h"
 
 class Controller;
 
@@ -21,14 +22,18 @@ class Controller;
 #define E_CHANGE_RANGING ((unsigned long)0x00000040)
 #define E_REACH ((unsigned long)0x00000080)
 
-
+#if 0
 #define TRUE (1)
 #define FALSE (0)
+#endif
+
+extern int kbhit(void);
+extern char getch(void);
 
 class Event {
-public:
+ public:
     Event(Controller* controller);
-    void updateEvent();
+    int updateEvent();
     unsigned long getEvent();
 
 private:

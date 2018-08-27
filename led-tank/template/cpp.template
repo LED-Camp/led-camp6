@@ -10,11 +10,6 @@ ${u.name}::${u.name}(Controller *controller){
 
   this->controller = controller;
 
-<% for(var in u.iclass.getAttributes()){%>\
-<% if(var.getAssociation() == null){%>\
-  this->${var.getName()} = 0;
-<%}%>\
-<%}%>\
 }
 
 void ${u.name}::execState(){

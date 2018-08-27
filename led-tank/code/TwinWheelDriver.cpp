@@ -1,6 +1,7 @@
 #include "TwinWheelDriver.h"
 #include "Motor.h"
 #include "Position.h"
+#include "UserDefine.h"
 
 TwinWheelDriver* TwinWheelDriver::_instance = 0;
 
@@ -21,26 +22,27 @@ TwinWheelDriver::TwinWheelDriver(int pin1A, int pin1B, int pin2A, int pin2B) {
 
 void TwinWheelDriver::changeDriveMode(Mode mode, int voltage_level, Position* position) {
     //voltage_level : 0`100
-    double r = ((double) voltage_level);
+    double r = ((double) voltage_level) * R_MOTOR_COFF / 100.0;
+    double l = ((double) voltage_level) * L_MOTOR_COFF / 100.0;
 
     if (mode == STOP) {
         motorL->pwmWrite(0.0);
         motorR->pwmWrite(0.0);
         position->setDir(DIR_FORWARD, DIR_FORWARD);
     } else if (mode == FORWARD) {
-        motorL->pwmWrite(r);
+        motorL->pwmWrite(l);
         motorR->pwmWrite(r);
         position->setDir(DIR_FORWARD, DIR_FORWARD);
     } else if (mode == BACKWARD) {
-        motorL->pwmWrite(-r);
+        motorL->pwmWrite(-l);
         motorR->pwmWrite(-r);
         position->setDir(DIR_BACK, DIR_BACK);
     } else if (mode == CW) {
-        motorL->pwmWrite(r);
+        motorL->pwmWrite(l);
         motorR->pwmWrite(-r);
         position->setDir(DIR_FORWARD, DIR_BACK);
     } else if (mode == CCW) {
-        motorL->pwmWrite(-r);
+        motorL->pwmWrite(-l);
         motorR->pwmWrite(r);
         position->setDir(DIR_BACK, DIR_FORWARD);
     }

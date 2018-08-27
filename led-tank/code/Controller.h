@@ -2,18 +2,27 @@
 #define __CONTROLLER__
 
 #include <cstdint>
+#include "CommonDefine.h"
 #include "RangingSensor.h"
 #include "TwinWheelDriver.h"
 #include "Position.h"
+#include "CNetMqtt.h"
+
+class Score;
 
 class Controller {
 private:
     TwinWheelDriver *twinWheelDriver;
     Position *position;
     RangingSensor *rangingSensor;
+    CNetMqtt netMqtt;
+    Score *score;
+
+    enMsgId_t enMsg;
 
 protected:
     Controller(void);
+    ~Controller(void);
 
 public:
     static Controller* _instance;
@@ -29,6 +38,12 @@ public:
 
     // RangingSensorån
     float getRanging(void);
+
+    // Courseån
+    void getNextScoreTable(int nextScoreTable[4]);
+    int subscrTopic(void);
+    int dequeueMessage(void);
+
 };
 
 #endif

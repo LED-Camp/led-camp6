@@ -2,7 +2,7 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 
-#define PWM_RANGE 100
+#define PWM_RANGE ((double)100.0)
 
 Motor::Motor(int pin1, int pin2) {
     this->pin1 = pin1;
@@ -17,19 +17,19 @@ Motor::~Motor() {
 }
 
 void Motor::pwmWrite(double ratio) {
-    if (ratio > 1.0)
-        ratio = 1.0; // saturation
-    else if (ratio < -1.0)
-        ratio = -1.0;
+    if (ratio > 100.0)
+        ratio = 100.0; // saturation
+    else if (ratio < -100.0)
+        ratio = -100.0;
 
-    if ((ratio < 0.01) && (ratio > -0.01)) { // Stop
+    if ((ratio < 1.0) && (ratio > -1.0)) { // Stop
         softPwmWrite(pin1, 0);
         softPwmWrite(pin2, 0);
     } else if (ratio > 0) { // Nomal rotation
-        softPwmWrite(pin1, (int) (ratio * PWM_RANGE));
+        softPwmWrite(pin1, (int) (ratio));
         softPwmWrite(pin2, 0);
     } else { // Reverse rotation
         softPwmWrite(pin1, 0);
-        softPwmWrite(pin2, (int) (-ratio * PWM_RANGE));
+        softPwmWrite(pin2, (int) (-ratio));
     }
 }

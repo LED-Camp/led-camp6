@@ -75,9 +75,9 @@ Event::Event(Controller *controller) :
           distanceOld(0.0F),
           angleOld(0.0F),
           rangingDistanceOld(0){
+
     this->event = 0;
     this->controller = controller;
-
 }
 
 /**
@@ -86,7 +86,7 @@ Event::Event(Controller *controller) :
  * @return -
  * @sa -
  */
-void Event::updateEvent() {
+int Event::updateEvent() {
     char c;
     float distance;
     float angle;
@@ -97,8 +97,13 @@ void Event::updateEvent() {
     float rangingDistance;
 
     if (kbhit()) {
-        c = getchar();
+        c = getch();
     }
+
+    if(c == 'q'){
+      return -1;
+    }
+
     controller->getPosition(&distance, &angle);
     absDistanceDiff = ABS_FLOAT(this->distanceOld - distance);
     absAngleDiff = ABS_FLOAT(this->angleOld - angle);
@@ -109,6 +114,7 @@ void Event::updateEvent() {
     }else{
       this->event &= ~E_CHANGE_RANGING;
     }
+
 
     // E_UPƒCƒxƒ“ƒg”»’è
     if (c == 'w') {
@@ -150,11 +156,20 @@ void Event::updateEvent() {
         this->event &= ~E_CHANGE_ANGLE;
     }
 
-    printf("distance=%lf, angle=%lf, ranging=%lf\n", distance, angle, rangingDistance);
+    if((controller->subscrTopic() == RET_SUCCESS) &&
+       (controller->dequeueMessage() != RET_FAILED)){
+         this->event |= E_REACH;
+    }else{
+        this->event &= ~E_REACH;
+    }
+
+    printf("distance=%f, angle=%f, ranging=%f\n", distance, angle, rangingDistance);
 
     this->distanceOld = distance;
     this->angleOld = angle;
     this->rangingDistanceOld = rangingDistance;
+
+    return 0;
 }
 
 /**

@@ -26,6 +26,7 @@ class LEDTank{
   float angle;
   int cnt;
   float ranging;
+  int scoreTable[4];
 };
 
 #endif

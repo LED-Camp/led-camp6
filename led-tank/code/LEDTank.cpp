@@ -7,10 +7,6 @@ LEDTank::LEDTank(Controller *controller){
 
   this->controller = controller;
 
-  this->distance = 0;
-  this->angle = 0;
-  this->cnt = 0;
-  this->ranging = 0;
 }
 
 void LEDTank::execState(){
@@ -45,11 +41,14 @@ void LEDTank::doTransition(unsigned long event){
 
     //entry
     cnt = 0;
+distance = 0.0;
+angle = 0.0;
+
 
     break;
   case STATE_FORWARD:
 
-    if(((event & E_CHANGE_RANGING) != 0) && (ranging < 20.0)){
+    if(((event & E_CHANGE_RANGING) != 0) && (ranging < 40.0)){
 
       // exit
       
@@ -61,7 +60,6 @@ void LEDTank::doTransition(unsigned long event){
 
       //entry
       printf("[SLOW]\n");
-controller->reset();
 controller->changeDriveMode(FORWARD, 50);
 cnt++;
     }
@@ -136,6 +134,8 @@ cnt++;
 
       //entry
       printf("[TURN]\n");
+controller->getNextScoreTable(scoreTable);
+printf("score : %d,%d,%d,%d\n",scoreTable[0],scoreTable[1],scoreTable[2],scoreTable[3]);
 controller->reset();
 controller->changeDriveMode(CW, 50);
     }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <time.h>
+#include "wiringPi.h"
 #include "Event.h"
 #include "Controller.h"
 
@@ -11,14 +12,18 @@ int main(void){
   struct timeval now;
   struct timeval old;
 
+  char c;
+
   Controller *controller;
   Event *event;
+  LEDTank *lEDTank;
+
 
   if( wiringPiSetupGpio() < 0){ //initialize failed
     return 1;
+
   }
 
-  LEDTank *lEDTank;
   controller = Controller::getInstance();
 
   lEDTank = new LEDTank(controller);
@@ -28,16 +33,26 @@ int main(void){
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
 
-  while(true){
+  while(1){
     while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
       gettimeofday(&now, NULL);
     }
     old = now;
 
-    event->updateEvent();
+    if(event->updateEvent() < 0){
+        controller->changeDriveMode(STOP, 0);
+        break;
+    }
 
     lEDTank->execState();
     lEDTank->doTransition(event->getEvent());
+  }
+
+  gettimeofday(&now, NULL);
+  gettimeofday(&old, NULL);
+
+  while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
+    gettimeofday(&now, NULL);
   }
 
   delete lEDTank;

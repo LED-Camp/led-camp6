@@ -19,15 +19,15 @@ void interruptCountA(void) {
     gettimeofday(&nowA, NULL);
 
     if ((nowA.tv_sec - oldA.tv_sec) + (nowA.tv_usec - oldA.tv_usec) * 1.0E-6
-            > 5.0 * 1.0E-6) {
+            > 200.0 * 1.0E-6) {
         if (dirA == DIR_FORWARD) {
             countA++;
         } else {
             countA--;
         }
-    } else {
-        printf("\terror\n");
     }
+
+    //fprintf(stderr,"l = %d\n",countA);
 
     oldA = nowA;
 }
@@ -36,13 +36,15 @@ void interruptCountB(void) {
     gettimeofday(&nowB, NULL);
 
     if ((nowB.tv_sec - oldB.tv_sec) + (nowB.tv_usec - oldB.tv_usec) * 1.0E-6
-            > 5.0 * 1.0E-6) {
+            > 200.0 * 1.0E-6) {
         if (dirB == DIR_FORWARD) {
             countB++;
         } else {
             countB--;
         }
     }
+
+    //fprintf(stderr,"r = %d\n",countB);
 
     oldB = nowB;
 }

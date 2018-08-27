@@ -14,16 +14,20 @@ int main(void){
   struct timeval now;
   struct timeval old;
 
+  char c;
+
   Controller *controller;
   Event *event;
-
-  if( wiringPiSetupGpio() < 0){ //initialize failed
-    return 1;
-  }
-
 <% for(c in getClasses()){ %>\
   ${c.name} *${u.getInstanceName(c)};
 <%}%>\
+
+
+  if( wiringPiSetupGpio() < 0){ //initialize failed
+    return 1;
+
+  }
+
   controller = Controller::getInstance();
 
 <% for(c in getClasses()){ %>\
@@ -35,13 +39,16 @@ int main(void){
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
 
-  while(true){
+  while(1){
     while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
       gettimeofday(&now, NULL);
     }
     old = now;
 
-    event->updateEvent();
+    if(event->updateEvent() < 0){
+        controller->changeDriveMode(STOP, 0);
+        break;
+    }
 
 <% for(c in getClasses()){ %>\
     ${u.getInstanceName(c)}->execState();
@@ -49,6 +56,13 @@ int main(void){
 <% for(c in getClasses()){ %>\
     ${u.getInstanceName(c)}->doTransition(event->getEvent());
 <%}%>\
+  }
+
+  gettimeofday(&now, NULL);
+  gettimeofday(&old, NULL);
+
+  while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
+    gettimeofday(&now, NULL);
   }
 
 <% for(c in getClasses()){ %>\

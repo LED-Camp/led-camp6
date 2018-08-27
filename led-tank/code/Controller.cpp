@@ -1,4 +1,6 @@
 #include "Controller.h"
+#include "Score.h"
+#include "UserDefine.h"
 
 Controller* Controller::_instance = 0;
 
@@ -12,10 +14,21 @@ Controller* Controller::getInstance(void) {
 }
 
 Controller::Controller(void) {
-    twinWheelDriver = TwinWheelDriver::getInstance(5, 6, 13, 19);
+    netMqtt = CNetMqtt::getInstance();
+    netMqtt.initConnect("PLAYER", COURSE_IP_ADDR);
+
     position = Position::getInstance(17, 27);
+
     rangingSensor = RangingSensor::getInstance();
     rangingSensor->Initialize();
+
+    twinWheelDriver = TwinWheelDriver::getInstance(5, 6, 13, 19);
+
+    score = new Score();
+}
+
+Controller::~Controller(void) {
+    delete(score);
 }
 
 void Controller::reset(void) {
@@ -33,4 +46,26 @@ void Controller::changeDriveMode(Mode mode, int voltage_level) {
 
 float Controller::getRanging(void) {
     return rangingSensor->getRanging();
+}
+
+void Controller::getNextScoreTable(int nextScoreTable[4]) {
+    char payload[255];
+
+    // メッセージ取得
+    netMqtt.getContent(payload,sizeof(payload));
+
+    // メッセージの解析
+    score->ParsePayload(payload);
+
+    // スコアの取得とリターン
+    score->getNextScoreTable(nextScoreTable);
+}
+
+//
+int Controller::subscrTopic(void) {
+    return netMqtt.subscrTopic("LED-Camp/point");
+}
+
+int Controller::dequeueMessage(void) {
+    return netMqtt.dequeueMessage(&enMsg);
 }

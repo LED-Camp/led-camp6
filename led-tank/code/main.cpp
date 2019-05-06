@@ -1,47 +1,60 @@
 #include <iostream>
-#include <time.h>
-#include "PreEvent.h"
-#include "Position.h"
 #include <sys/time.h>
-
+#include <time.h>
+#include "wiringPi.h"
+#include "Event.h"
 #include "Controller.h"
+
+#include "LEDTank.h"
 
 
 int main(void){
   struct timeval now;
   struct timeval old;
 
-  Position *position;
-  PreEvent *preEvent;
-  float n;
+  char c;
 
   Controller *controller;
+  Event *event;
+  LEDTank *lEDTank;
+
 
   if( wiringPiSetupGpio() < 0){ //initialize failed
     return 1;
+
   }
 
-  position = Position::getInstance(2, 3);
+  controller = Controller::getInstance();
 
-  controller = new Controller(position);
+  lEDTank = new LEDTank(controller);
 
-  preEvent = new PreEvent(position);
+  event = new Event(controller);
 
   gettimeofday(&now, NULL);
   gettimeofday(&old, NULL);
 
-  while(true){
+  while(1){
     while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
       gettimeofday(&now, NULL);
     }
     old = now;
 
-    preEvent->updatePreEvent();
+    if(event->updateEvent() < 0){
+        controller->changeDriveMode(STOP, 0);
+        break;
+    }
 
-    controller->execState();
-    controller->doTransition(preEvent->getPreEvent());
+    lEDTank->execState();
+    lEDTank->doTransition(event->getEvent());
   }
 
-  delete controller;
-  delete preEvent;
+  gettimeofday(&now, NULL);
+  gettimeofday(&old, NULL);
+
+  while((now.tv_sec - old.tv_sec) + (now.tv_usec - old.tv_usec)*1.0E-6  < 0.05F){
+    gettimeofday(&now, NULL);
+  }
+
+  delete lEDTank;
+  delete event;
 }

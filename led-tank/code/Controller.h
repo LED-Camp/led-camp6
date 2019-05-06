@@ -1,32 +1,49 @@
-#ifndef __Controller__
-#define __Controller__
+#ifndef __CONTROLLER__
+#define __CONTROLLER__
 
-#include "rctank.h"
+#include <cstdint>
+#include "CommonDefine.h"
+#include "RangingSensor.h"
+#include "TwinWheelDriver.h"
 #include "Position.h"
+#include "CNetMqtt.h"
 
-#define _STATE_INITIAL 0x00000000
-#define STATE_FORWARD ((unsigned long)1)
-#define STATE_BACKWARD ((unsigned long)2)
-#define STATE_LEFT ((unsigned long)3)
-#define STATE_RIGHT ((unsigned long)4)
-#define STATE_STOP ((unsigned long)5)
+class Score;
 
-class PreController;
+class Controller {
+private:
+    TwinWheelDriver *twinWheelDriver;
+    Position *position;
+    RangingSensor *rangingSensor;
+    CNetMqtt netMqtt;
+    Score *score;
 
-class Controller{
- public:
-  Controller(Position *position);
-  void execState();
-  void doTransition(unsigned long event);
+    enMsgId_t enMsg;
 
- private:
-  DcMotor *motorL;
-  DcMotor *motorR;
-  Position *position;
+protected:
+    Controller(void);
+    ~Controller(void);
 
-  unsigned long state;
-  unsigned long beforeState;
-  PreController *preController;
+public:
+    static Controller* _instance;
+
+    static Controller* getInstance(void);
+
+    // Positionån
+    void reset(void);
+    void getPosition(float* distance, float* angle);
+
+    // twinWheelDriverån
+    void changeDriveMode(Mode mode, int voltage_level);
+
+    // RangingSensorån
+    float getRanging(void);
+
+    // Courseån
+    void getNextScoreTable(int nextScoreTable[4]);
+    int subscrTopic(void);
+    int dequeueMessage(void);
+
 };
 
 #endif

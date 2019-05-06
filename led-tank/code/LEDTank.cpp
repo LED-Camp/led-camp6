@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "PreEvent.h"
+#include "Event.h"
 #include "LEDTank.h"
 
 LEDTank::LEDTank(Controller *controller){
@@ -7,15 +7,13 @@ LEDTank::LEDTank(Controller *controller){
 
   this->controller = controller;
 
-  this->distance = 0;
-  this->angle = 0;
-  this->cnt = 0;
 }
 
 void LEDTank::execState(){
   switch(this->state){
   case STATE_FORWARD:
     controller->getPosition(&distance, &angle);
+ranging = controller->getRanging();
     break;
   case STATE_TURN:
     controller->getPosition(&distance, &angle);
@@ -25,6 +23,9 @@ void LEDTank::execState(){
     break;
   case STATE_STOP:
     
+    break;
+  case STATE_SLOW:
+    controller->getPosition(&distance, &angle);
     break;
   default:
     break;
@@ -40,11 +41,14 @@ void LEDTank::doTransition(unsigned long event){
 
     //entry
     cnt = 0;
+distance = 0.0;
+angle = 0.0;
+
 
     break;
   case STATE_FORWARD:
 
-    if(((event & E_CHANGE_DISTANCE) != 0) && (distance > 100.0)){
+    if(((event & E_CHANGE_RANGING) != 0) && (ranging < 40.0)){
 
       // exit
       
@@ -52,12 +56,12 @@ void LEDTank::doTransition(unsigned long event){
       //action
       
 
-      this->state = STATE_TURN;
+      this->state = STATE_SLOW;
 
       //entry
-      printf("[TURN]\n");
-controller->reset();
-controller->changeDriveMode(CW, 5);
+      printf("[SLOW]\n");
+controller->changeDriveMode(FORWARD, 50);
+cnt++;
     }
     break;
   case STATE_TURN:
@@ -75,7 +79,7 @@ controller->changeDriveMode(CW, 5);
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 5);
+controller->changeDriveMode(FORWARD, 80);
 cnt++;
     }
     else
@@ -92,7 +96,7 @@ cnt++;
 
       //entry
       printf("[STOP]\n");
-controller->changeDriveMode(STOP, 5);
+controller->changeDriveMode(STOP, 0);
     }
     break;
   case STATE_INIT:
@@ -110,11 +114,31 @@ controller->changeDriveMode(STOP, 5);
       //entry
       printf("[FORWARD]\n");
 controller->reset();
-controller->changeDriveMode(FORWARD, 5);
+controller->changeDriveMode(FORWARD, 80);
 cnt++;
     }
     break;
   case STATE_STOP:
+    break;
+  case STATE_SLOW:
+
+    if(((event & E_REACH) != 0) ){
+
+      // exit
+      
+
+      //action
+      
+
+      this->state = STATE_TURN;
+
+      //entry
+      printf("[TURN]\n");
+controller->getNextScoreTable(scoreTable);
+printf("score : %d,%d,%d,%d\n",scoreTable[0],scoreTable[1],scoreTable[2],scoreTable[3]);
+controller->reset();
+controller->changeDriveMode(CW, 50);
+    }
     break;
   default:
     break;

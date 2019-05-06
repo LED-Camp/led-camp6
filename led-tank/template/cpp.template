@@ -2,20 +2,14 @@
     ?"&& (" + str + ")"\
     :""}%>\
 #include <stdio.h>
-#include "rctank.h"
-#include "PreEvent.h"
+#include "Event.h"
 #include "${u.name}.h"
 
-${u.name}::${u.name}(Position *position){
+${u.name}::${u.name}(Controller *controller){
   this->state = _STATE_INITIAL;
 
-<% for(var in u.iclass.getAttributes()){%>\
-<% if(var.getAssociation() == null){%>\
-  this->${var.getName()} = 0;
-<%}%>\
-<%}%>\
-  motorL = new DcMotor(5, 6);
-  motorR = new DcMotor(13,19);
+  this->controller = controller;
+
 }
 
 void ${u.name}::execState(){
@@ -48,7 +42,11 @@ void ${u.name}::doTransition(unsigned long event){
 <% if(firstFlag){ firstFlag = false; } else {%>\
     else
 <% } %>\
+<% if(t.event == "TRUE"){ %>
+    if(TRUE ${getGuardCode(t.guard)}){
+<% }else{ %>
     if(((event & ${t.event}) != 0) ${getGuardCode(t.guard)}){
+<% } %>
       // exit
       ${state.exit}
 

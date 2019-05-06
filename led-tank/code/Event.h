@@ -8,6 +8,9 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 
+#include <cstdint>
+#include "wiringPi.h"
+
 class Controller;
 
 #define E_UP ((unsigned long)0x00000001)
@@ -16,22 +19,30 @@ class Controller;
 #define E_RIGHT ((unsigned long)0x00000008)
 #define E_CHANGE_DISTANCE ((unsigned long)0x00000010)
 #define E_CHANGE_ANGLE ((unsigned long)0x00000020)
+#define E_CHANGE_RANGING ((unsigned long)0x00000040)
+#define E_REACH ((unsigned long)0x00000080)
 
+#if 0
 #define TRUE (1)
 #define FALSE (0)
+#endif
 
-class PreEvent{
-public:
-  PreEvent(Controller *controller);
-  void updatePreEvent();
-  unsigned long getPreEvent();
+extern int kbhit(void);
+extern char getch(void);
 
- private:
-  unsigned long event;
-  Controller *controller;
+class Event {
+ public:
+    Event(Controller* controller);
+    int updateEvent();
+    unsigned long getEvent();
 
-  float distanceOld;
-  float angleOld;
+private:
+    Controller* controller;
+    unsigned long event;
+
+    float distanceOld;
+    float angleOld;
+    uint16_t rangingDistanceOld;
 };
 
 #endif
